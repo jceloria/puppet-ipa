@@ -289,6 +289,7 @@ class ipa::server(
 
 	$unless = "/usr/bin/python -c 'import sys,ipaserver.install.installutils; sys.exit(0 if ipaserver.install.installutils.is_ipa_configured() else 1)'"
 	exec { "/usr/sbin/ipa-server-install ${args} --unattended":
+    timeout => 0,
 		logoutput => on_failure,
 		unless => "${unless}",	# can't install if already installed...
 		require => [
@@ -1195,6 +1196,7 @@ class ipa::client(
 	$onlyif = "/usr/bin/test '${has_auth}' = 'true'"
 	$unless = "/usr/bin/python -c 'import sys,ipapython.sysrestore; sys.exit(0 if ipapython.sysrestore.FileStore(\"/var/lib/ipa-client/sysrestore\").has_files() else 1)'"
 	exec { "/usr/sbin/ipa-client-install ${args} --unattended":
+    timeout => 0,
 		logoutput => on_failure,
 		onlyif => "${onlyif}",	# needs a password or authentication...
 		unless => "${unless}",	# can't install if already installed...
